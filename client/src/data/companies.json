@@ -1,0 +1,648 @@
+[
+  {
+    "id": "kongsberg-maritime",
+    "name": "Kongsberg Maritime",
+    "country": "Norge",
+    "city": "Kongsberg",
+    "segment": "Marina Automation",
+    "priority": "AAA",
+    "status": "new",
+    "assignedTo": null,
+    "deadline": null,
+    "description": "Kongsberg Maritime är en global ledare inom marina teknologilösningar, inklusive automation, navigation, och propulsionssystem. De levererar avancerade system för kommersiella fartyg, offshore-applikationer och försvarsindustrin.",
+    "sowPotential": "€500K+",
+    "triggers": [
+      "Expansion inom elektrifiering och hybridpropulsion",
+      "Nya projekt inom autonoma fartyg kräver högprecisionssensorer",
+      "Ökad efterfrågan på digitala encoders för integration i moderna styrsystem",
+      "Konkurrenter använder fortfarande äldre resolver-teknologi"
+    ],
+    "decisionMakers": [
+      {
+        "name": "Geir Håøy",
+        "title": "CEO",
+        "role": "Technical",
+        "priority": "high",
+        "email": "geir.hy@kongsberg.com",
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@kongsberg.com",
+          "förnamnefternamn@kongsberg.com",
+          "f.efternamn@kongsberg.com"
+        ],
+        "email_alternatives": [
+          "geirhy@kongsberg.com",
+          "ghy@kongsberg.com"
+        ],
+        "linkedin_search": "https://www.linkedin.com/search/results/people/?keywords=Geir%20H%C3%A5%C3%B8y%20Kongsberg%20Maritime"
+      },
+      {
+        "name": "Sök: VP Engineering",
+        "title": "VP Engineering",
+        "role": "Technical",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@kongsberg.com",
+          "förnamnefternamn@kongsberg.com",
+          "f.efternamn@kongsberg.com"
+        ]
+      },
+      {
+        "name": "Sök: Head of R&D",
+        "title": "Head of R&D",
+        "role": "Technical",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@kongsberg.com",
+          "förnamnefternamn@kongsberg.com",
+          "f.efternamn@kongsberg.com"
+        ]
+      },
+      {
+        "name": "Sök: Procurement Manager",
+        "title": "Procurement Manager",
+        "role": "Buyer",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@kongsberg.com",
+          "förnamnefternamn@kongsberg.com",
+          "f.efternamn@kongsberg.com"
+        ]
+      },
+      {
+        "name": "Sök: Product Manager",
+        "title": "Product Manager",
+        "role": "Technical",
+        "priority": "medium",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@kongsberg.com",
+          "förnamnefternamn@kongsberg.com",
+          "f.efternamn@kongsberg.com"
+        ]
+      }
+    ],
+    "entryAngles": [
+      "Teknik-vinkel: Vi erbjuder digitala precisionsencoders med stöd för CANbus, J1939 och FSOE som är optimerade för elektriska framdrivningssystem och autonoma fartyg.",
+      "Marknadstrend-vinkel: Med den snabba elektrifieringen inom marinsektorn finns ett ökat behov av digitala mätsystem som kan ersätta traditionella resolvers.",
+      "Konkurrent-vinkel: Många av era konkurrenter använder fortfarande äldre lösningar – Heidenhains digitala encoders ger snabbare respons, högre precision och bättre integration."
+    ],
+    "qualifyingQuestions": [
+      "Vilka typer av sensorer och mätsystem använder ni idag i era propulsionssystem?",
+      "Har ni identifierat utmaningar med nuvarande positioneringslösningar, t.ex. precision eller integration?",
+      "Vilka kommunikationsprotokoll är viktigast för er när det gäller encoders?",
+      "Planerar ni att utveckla eller uppgradera era system inom kort?",
+      "Finns det krav på certifieringar eller ATEX-klassning för era produkter?"
+    ],
+    "notes": null,
+    "nextSteps": null,
+    "qualifierAnswers": []
+  },
+  {
+    "id": "abb-marine",
+    "name": "ABB Marine",
+    "country": "Finland",
+    "city": "Helsinki",
+    "segment": "Marina Automation",
+    "priority": "AAA",
+    "status": "new",
+    "assignedTo": null,
+    "deadline": null,
+    "description": "ABB Marine är en global ledare inom elektrifiering och automation för marina applikationer. De levererar propulsionssystem, energihantering och automationslösningar för kommersiella fartyg och offshore-industrin.",
+    "sowPotential": "€750K+",
+    "triggers": [
+      "Stor satsning på elektrifiering och hybridpropulsion",
+      "Nya projekt inom autonoma fartyg och digitalisering",
+      "Ökad efterfrågan på högprecisionssensorer för integration i ABB's styrsystem",
+      "Konkurrenter som Siemens och Danfoss använder äldre teknologi"
+    ],
+    "decisionMakers": [
+      {
+        "name": "Sök: Chief Technology Officer",
+        "title": "Chief Technology Officer",
+        "role": "Technical",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@abb.com",
+          "förnamnefternamn@abb.com",
+          "f.efternamn@abb.com"
+        ]
+      },
+      {
+        "name": "Sök: VP Engineering",
+        "title": "VP Engineering",
+        "role": "Technical",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@abb.com",
+          "förnamnefternamn@abb.com",
+          "f.efternamn@abb.com"
+        ]
+      },
+      {
+        "name": "Sök: Head of R&D",
+        "title": "Head of R&D",
+        "role": "Technical",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@abb.com",
+          "förnamnefternamn@abb.com",
+          "f.efternamn@abb.com"
+        ]
+      },
+      {
+        "name": "Sök: Procurement Manager",
+        "title": "Procurement Manager",
+        "role": "Buyer",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@abb.com",
+          "förnamnefternamn@abb.com",
+          "f.efternamn@abb.com"
+        ]
+      },
+      {
+        "name": "Sök: Product Manager",
+        "title": "Product Manager",
+        "role": "Technical",
+        "priority": "medium",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@abb.com",
+          "förnamnefternamn@abb.com",
+          "f.efternamn@abb.com"
+        ]
+      }
+    ],
+    "entryAngles": [
+      "Teknik-vinkel: Heidenhains digitala encoders med CANbus och FSOE-stöd är optimerade för ABB's elektriska framdrivningssystem och kan förbättra precision och tillförlitlighet.",
+      "Partnerskap-vinkel: Vi ser ABB som både konkurrent och potentiell partner – våra encoders kan komplettera era system och ge er konkurrensfördelar.",
+      "Innovation-vinkel: Med den snabba utvecklingen inom autonoma fartyg och elektrifiering kan Heidenhain hjälpa ABB att ligga i framkant med högprecisionsmätsystem."
+    ],
+    "qualifyingQuestions": [
+      "Vilka sensorer använder ni idag i era propulsionssystem?",
+      "Har ni identifierat begränsningar med nuvarande lösningar?",
+      "Vilka kommunikationsprotokoll prioriterar ni för framtida system?",
+      "Finns det projekt där ni söker externa leverantörer av precisionssensorer?",
+      "Hur ser er upphandlingsprocess ut för nya komponenter?"
+    ],
+    "notes": "ABB är både konkurrent och potentiell kund. Viktigt att positionera Heidenhain som kompletterande leverantör snarare än direkt konkurrent.",
+    "nextSteps": null,
+    "qualifierAnswers": []
+  },
+  {
+    "id": "danfoss-editron",
+    "name": "Danfoss Editron",
+    "country": "Finland",
+    "city": "Helsinki",
+    "segment": "Marina Automation",
+    "priority": "AAA",
+    "status": "new",
+    "assignedTo": null,
+    "deadline": null,
+    "description": "Danfoss Editron är en ledande leverantör av elektriska drivsystem för marina applikationer, inklusive elmotorer, inverters och batterisystem. De fokuserar på elektrifiering och hållbara lösningar för fartyg och offshore-industrin.",
+    "sowPotential": "€600K+",
+    "triggers": [
+      "Dominerar marknaden för elektriska drivsystem i Norden",
+      "Expansion inom hybridpropulsion och energilagring",
+      "Ökad efterfrågan på digitala encoders för integration i Danfoss styrsystem",
+      "Nya projekt inom offshore wind och elektrifierade färjor"
+    ],
+    "decisionMakers": [
+      {
+        "name": "Sök: Chief Technology Officer",
+        "title": "Chief Technology Officer",
+        "role": "Technical",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@danfoss.com",
+          "förnamnefternamn@danfoss.com",
+          "f.efternamn@danfoss.com"
+        ]
+      },
+      {
+        "name": "Sök: VP Engineering",
+        "title": "VP Engineering",
+        "role": "Technical",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@danfoss.com",
+          "förnamnefternamn@danfoss.com",
+          "f.efternamn@danfoss.com"
+        ]
+      },
+      {
+        "name": "Sök: Head of R&D",
+        "title": "Head of R&D",
+        "role": "Technical",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@danfoss.com",
+          "förnamnefternamn@danfoss.com",
+          "f.efternamn@danfoss.com"
+        ]
+      },
+      {
+        "name": "Sök: Procurement Manager",
+        "title": "Procurement Manager",
+        "role": "Buyer",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@danfoss.com",
+          "förnamnefternamn@danfoss.com",
+          "f.efternamn@danfoss.com"
+        ]
+      },
+      {
+        "name": "Sök: Product Manager",
+        "title": "Product Manager",
+        "role": "Technical",
+        "priority": "medium",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@danfoss.com",
+          "förnamnefternamn@danfoss.com",
+          "f.efternamn@danfoss.com"
+        ]
+      }
+    ],
+    "entryAngles": [
+      "Teknik-vinkel: Heidenhains digitala encoders med CANbus och J1939-stöd kan förbättra precision och integration i Danfoss elektriska drivsystem.",
+      "Marknadstrend-vinkel: Med elektrifieringen av marina applikationer ökar behovet av högprecisionssensorer – vi kan hjälpa Danfoss att ligga i framkant.",
+      "Konkurrent-vinkel: Många konkurrenter använder fortfarande resolvers – Heidenhains encoders ger snabbare respons och bättre digital integration."
+    ],
+    "qualifyingQuestions": [
+      "Vilka sensorer använder ni idag i era elmotorer och drivsystem?",
+      "Har ni identifierat begränsningar med nuvarande positioneringslösningar?",
+      "Vilka kommunikationsprotokoll är viktigast för er?",
+      "Planerar ni att utveckla nya produkter inom hybridpropulsion?",
+      "Hur ser er upphandlingsprocess ut för nya komponenter?"
+    ],
+    "notes": null,
+    "nextSteps": null,
+    "qualifierAnswers": []
+  },
+  {
+    "id": "humphree-stabilization-systems",
+    "name": "Humphree",
+    "country": "Sverige",
+    "city": "Göteborg",
+    "segment": "Marina Automation",
+    "priority": "A",
+    "status": "new",
+    "assignedTo": null,
+    "deadline": null,
+    "description": "Humphree är en svensk tillverkare av stabiliseringssystem och interceptors för båtar. De levererar avancerade kontrollsystem för att förbättra komfort och prestanda på havet.",
+    "sowPotential": "€150K+",
+    "triggers": [
+      "Ny CEO från Volvo Penta tillträder december 2025 – nytt fönster för kontakt",
+      "Expansion inom elektrifiering och digitalisering av stabiliseringssystem",
+      "Ökad efterfrågan på precisionssensorer för realtidskontroll",
+      "Konkurrenter använder äldre teknologi"
+    ],
+    "decisionMakers": [
+      {
+        "name": "Sök: Chief Technology Officer",
+        "title": "Chief Technology Officer",
+        "role": "Technical",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@humphree.com",
+          "förnamnefternamn@humphree.com",
+          "f.efternamn@humphree.com"
+        ]
+      },
+      {
+        "name": "Sök: VP Engineering",
+        "title": "VP Engineering",
+        "role": "Technical",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@humphree.com",
+          "förnamnefternamn@humphree.com",
+          "f.efternamn@humphree.com"
+        ]
+      },
+      {
+        "name": "Sök: Head of R&D",
+        "title": "Head of R&D",
+        "role": "Technical",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@humphree.com",
+          "förnamnefternamn@humphree.com",
+          "f.efternamn@humphree.com"
+        ]
+      },
+      {
+        "name": "Sök: Procurement Manager",
+        "title": "Procurement Manager",
+        "role": "Buyer",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@humphree.com",
+          "förnamnefternamn@humphree.com",
+          "f.efternamn@humphree.com"
+        ]
+      },
+      {
+        "name": "Sök: Product Manager",
+        "title": "Product Manager",
+        "role": "Technical",
+        "priority": "medium",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@humphree.com",
+          "förnamnefternamn@humphree.com",
+          "f.efternamn@humphree.com"
+        ]
+      }
+    ],
+    "entryAngles": [
+      "Timing-vinkel: Gratulera ny CEO och erbjud möte för att diskutera hur Heidenhain kan stödja Humphrees tekniska utveckling.",
+      "Teknik-vinkel: Heidenhains precisionsencoders kan förbättra noggrannheten i era stabiliseringssystem och ge snabbare respons.",
+      "Innovation-vinkel: Med elektrifieringen av marina applikationer kan Heidenhain hjälpa Humphree att ligga i framkant med digitala mätsystem."
+    ],
+    "qualifyingQuestions": [
+      "Vilka sensorer använder ni idag i era stabiliseringssystem?",
+      "Har ni identifierat utmaningar med precision eller responstid?",
+      "Vilka kommunikationsprotokoll prioriterar ni?",
+      "Planerar ni att utveckla nya produkter inom elektrifiering?",
+      "Hur ser er upphandlingsprocess ut?"
+    ],
+    "notes": "Ny CEO från Volvo Penta i december 2025 – perfekt timing för kontakt!",
+    "nextSteps": null,
+    "qualifierAnswers": []
+  },
+  {
+    "id": "sleipner-motor",
+    "name": "Sleipner Motor",
+    "country": "Norge",
+    "city": "Ålesund",
+    "segment": "Marina Automation",
+    "priority": "AA",
+    "status": "new",
+    "assignedTo": null,
+    "deadline": null,
+    "description": "Sleipner Motor är en norsk tillverkare av bogpropellrar och stabiliseringssystem för båtar. De är kända för sina robusta och pålitliga produkter för fritidsbåtar och mindre kommersiella fartyg.",
+    "sowPotential": "€200K+",
+    "triggers": [
+      "Pågående lead via Harmonic Drives – redan etablerad kontakt",
+      "Expansion inom elektrifiering av bogpropellrar",
+      "Ökad efterfrågan på digitala encoders för integration i styrsystem",
+      "Konkurrenter använder äldre teknologi"
+    ],
+    "decisionMakers": [
+      {
+        "name": "Tore Eriksen",
+        "title": "Sales Manager",
+        "role": "Technical",
+        "priority": "high",
+        "email": "tore.eriksen@sleipner.no",
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@sleipner.no",
+          "förnamnefternamn@sleipner.no",
+          "f.efternamn@sleipner.no"
+        ],
+        "email_alternatives": [
+          "toreeriksen@sleipner.no",
+          "teriksen@sleipner.no"
+        ],
+        "linkedin_search": "https://www.linkedin.com/search/results/people/?keywords=Tore%20Eriksen%20Sleipner%20Motor"
+      },
+      {
+        "name": "Sök: VP Engineering",
+        "title": "VP Engineering",
+        "role": "Technical",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@sleipner.no",
+          "förnamnefternamn@sleipner.no",
+          "f.efternamn@sleipner.no"
+        ]
+      },
+      {
+        "name": "Sök: Head of R&D",
+        "title": "Head of R&D",
+        "role": "Technical",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@sleipner.no",
+          "förnamnefternamn@sleipner.no",
+          "f.efternamn@sleipner.no"
+        ]
+      },
+      {
+        "name": "Sök: Procurement Manager",
+        "title": "Procurement Manager",
+        "role": "Buyer",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@sleipner.no",
+          "förnamnefternamn@sleipner.no",
+          "f.efternamn@sleipner.no"
+        ]
+      },
+      {
+        "name": "Sök: Product Manager",
+        "title": "Product Manager",
+        "role": "Technical",
+        "priority": "medium",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@sleipner.no",
+          "förnamnefternamn@sleipner.no",
+          "f.efternamn@sleipner.no"
+        ]
+      }
+    ],
+    "entryAngles": [
+      "Uppföljning-vinkel: Följ upp pågående kontakt via Harmonic Drives och erbjud tekniskt möte för att diskutera Heidenhains encoders.",
+      "Teknik-vinkel: Heidenhains digitala encoders kan förbättra precision och tillförlitlighet i era bogpropellrar och stabiliseringssystem.",
+      "Marknadstrend-vinkel: Med elektrifieringen av marina applikationer ökar behovet av högprecisionssensorer – vi kan hjälpa Sleipner att ligga i framkant."
+    ],
+    "qualifyingQuestions": [
+      "Vilka sensorer använder ni idag i era bogpropellrar?",
+      "Har ni identifierat utmaningar med nuvarande lösningar?",
+      "Vilka kommunikationsprotokoll prioriterar ni?",
+      "Planerar ni att utveckla nya produkter inom elektrifiering?",
+      "Hur ser er upphandlingsprocess ut?"
+    ],
+    "notes": "Varm lead – pågående kontakt via Harmonic Drives. Prioritera uppföljning!",
+    "nextSteps": null,
+    "qualifierAnswers": []
+  },
+  {
+    "id": "candela",
+    "name": "Candela",
+    "country": "Sverige",
+    "city": "Stockholm",
+    "segment": "Marina Automation",
+    "priority": "A",
+    "status": "new",
+    "assignedTo": null,
+    "deadline": null,
+    "description": "Candela är en innovativ svensk tillverkare av elektriska fritidsbåtar med fokus på högpresterande, miljövänliga framdrivningssystem. De utvecklar egna elektriska drivsystem och avancerade kontrollsystem.",
+    "sowPotential": "€100K+",
+    "triggers": [
+      "Snabb tillväxt inom elektriska fritidsbåtar",
+      "Specifikt behov av J1939-protokoll för hydrofoil-kontroll",
+      "Ökad efterfrågan på digitala encoders för integration i Candelas styrsystem",
+      "Konkurrenter använder äldre resolver-teknologi"
+    ],
+    "decisionMakers": [
+      {
+        "name": "Sök: Chief Technology Officer",
+        "title": "Chief Technology Officer",
+        "role": "Technical",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@candela.com",
+          "förnamnefternamn@candela.com",
+          "f.efternamn@candela.com"
+        ]
+      },
+      {
+        "name": "Sök: VP Engineering",
+        "title": "VP Engineering",
+        "role": "Technical",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@candela.com",
+          "förnamnefternamn@candela.com",
+          "f.efternamn@candela.com"
+        ]
+      },
+      {
+        "name": "Sök: Head of R&D",
+        "title": "Head of R&D",
+        "role": "Technical",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@candela.com",
+          "förnamnefternamn@candela.com",
+          "f.efternamn@candela.com"
+        ]
+      },
+      {
+        "name": "Sök: Procurement Manager",
+        "title": "Procurement Manager",
+        "role": "Buyer",
+        "priority": "high",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@candela.com",
+          "förnamnefternamn@candela.com",
+          "f.efternamn@candela.com"
+        ]
+      },
+      {
+        "name": "Sök: Product Manager",
+        "title": "Product Manager",
+        "role": "Technical",
+        "priority": "medium",
+        "email": null,
+        "phone": null,
+        "linkedin": null,
+        "email_patterns": [
+          "förnamn.efternamn@candela.com",
+          "förnamnefternamn@candela.com",
+          "f.efternamn@candela.com"
+        ]
+      }
+    ],
+    "entryAngles": [
+      "Teknik-vinkel: Heidenhains digitala encoders med J1939-stöd är perfekta för era hydrofoil-kontrollsystem och kan förbättra precision och respons.",
+      "Innovation-vinkel: Som innovativ aktör inom elektriska båtar kan Candela dra nytta av Heidenhains högprecisionsmätsystem för att ligga i framkant.",
+      "Konkurrent-vinkel: Många konkurrenter använder fortfarande resolvers – Heidenhains encoders ger snabbare respons och bättre integration."
+    ],
+    "qualifyingQuestions": [
+      "Vilka sensorer använder ni idag i era elektriska framdrivningssystem?",
+      "Har ni identifierat utmaningar med precision eller integration?",
+      "Vilka kommunikationsprotokoll är viktigast för er (t.ex. J1939)?",
+      "Planerar ni att utveckla eller uppgradera era hydrofoil-system?",
+      "Finns det krav på certifieringar eller ATEX-klassning?"
+    ],
+    "notes": "Perfekt match för J1939-lösning till hydrofoil-kontroll!",
+    "nextSteps": null,
+    "qualifierAnswers": []
+  }
+]

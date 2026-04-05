@@ -1,0 +1,15 @@
+{
+  "query": "SELECT (SELECT COUNT(*) FROM companies) as total_companies, (SELECT COUNT(*) FROM contacts) as total_contacts, (SELECT COUNT(*) FROM contacts WHERE email IS NOT NULL AND email != '') as contacts_with_email;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3UxY7cuXnvuRi8f.8c1609f0f8aa --database b3TbS2DyQf7qnZv6huYWZm --execute SELECT (SELECT COUNT(*) FROM companies) as total_companies, (SELECT COUNT(*) FROM contacts) as total_contacts, (SELECT COUNT(*) FROM contacts WHERE email IS NOT NULL AND email != '') as contacts_with_email;",
+  "rows": [
+    {
+      "total_companies": "98",
+      "total_contacts": "267",
+      "contacts_with_email": "241"
+    }
+  ],
+  "messages": [],
+  "stdout": "total_companies\ttotal_contacts\tcontacts_with_email\n98\t267\t241\n",
+  "stderr": "",
+  "execution_time_ms": 499
+}

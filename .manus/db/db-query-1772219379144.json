@@ -1,0 +1,18 @@
+{
+  "query": "SELECT 'companies' as tbl, COUNT(*) as cnt FROM companies UNION ALL SELECT 'contacts', COUNT(*) FROM contacts;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3UxY7cuXnvuRi8f.8c1609f0f8aa --database b3TbS2DyQf7qnZv6huYWZm --execute SELECT 'companies' as tbl, COUNT(*) as cnt FROM companies UNION ALL SELECT 'contacts', COUNT(*) FROM contacts;",
+  "rows": [
+    {
+      "tbl": "companies",
+      "cnt": "98"
+    },
+    {
+      "tbl": "contacts",
+      "cnt": "267"
+    }
+  ],
+  "messages": [],
+  "stdout": "tbl\tcnt\ncompanies\t98\ncontacts\t267\n",
+  "stderr": "",
+  "execution_time_ms": 493
+}

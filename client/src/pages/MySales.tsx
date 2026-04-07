@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { getLoginUrl } from "@/const";
+// import { getLoginUrl } from "@/const";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -72,9 +72,9 @@ export default function MySales() {
         </div>
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Heidenhain Lead Intelligence</h1>
         <p className="text-gray-500 mb-6 text-center max-w-sm">
-          Logga in med ditt Manus-konto för att se dina tilldelade prospekt.
+          Logga in för att se dina tilldelade prospekt.
         </p>
-        <a href={getLoginUrl()}>
+        <a href="/login">
           <Button className="bg-red-600 hover:bg-red-700 gap-2">
             <LogIn className="w-4 h-4" />
             Logga in

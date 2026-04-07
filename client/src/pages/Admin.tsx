@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { getLoginUrl } from "@/const";
+// import { getLoginUrl } from "@/const";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import {
   Building2, Users, ChevronRight, Zap, Upload, Calendar,
-  UserCheck, ArrowLeft, CheckSquare, Square, RefreshCw, Shield
+  UserCheck, ArrowLeft, CheckSquare, Square, RefreshCw, Shield,
+  CloudUpload, CloudDownload, Wifi, WifiOff, Loader2
 } from "lucide-react";
 
 const focusBadge: Record<string, string> = {
@@ -40,9 +41,191 @@ function getWeekLabel() {
   return `${year}-V${String(week).padStart(2, "0")}`;
 }
 
+function ClaySyncTab() {
+  const [pollingEnabled, setPollingEnabled] = useState(false);
+
+  const testConnection = trpc.clay.testConnection.useQuery(undefined, {
+    enabled: false,
+    retry: false,
+  });
+
+  const syncStatus = trpc.clay.syncStatus.useQuery(undefined, {
+    refetchInterval: pollingEnabled ? 2000 : false,
+  });
+
+  const pushMutation = trpc.clay.pushToClay.useMutation({
+    onSuccess: (result) => {
+      toast.success(result.message);
+      if (result.pushed > 0) setPollingEnabled(true);
+    },
+    onError: (e) => toast.error("Fel: " + e.message),
+  });
+
+  const progress = syncStatus.data;
+  const isRunning = progress?.status === "pushing";
+
+  // Stop polling when done
+  if (pollingEnabled && progress && (progress.status === "done" || progress.status === "error" || progress.status === "idle")) {
+    if (progress.status === "done") {
+      setPollingEnabled(false);
+    }
+  }
+
+  const handleTestConnection = () => {
+    testConnection.refetch().then(({ data }) => {
+      if (data?.connected) {
+        toast.success("Clay-anslutning OK!");
+      } else {
+        toast.error("Kunde inte ansluta till Clay. Kontrollera API-nyckel och tabell-ID.");
+      }
+    });
+  };
+
+  const successCount = progress?.results.filter(r => r.success).length ?? 0;
+  const errorCount = progress?.results.filter(r => !r.success).length ?? 0;
+  const progressPercent = progress && progress.totalCompanies > 0
+    ? Math.round((progress.processedCompanies / progress.totalCompanies) * 100)
+    : 0;
+
+  return (
+    <div className="max-w-2xl">
+      <h2 className="text-xl font-bold text-gray-900 mb-1">Clay Sync</h2>
+      <p className="text-sm text-gray-500 mb-6">
+        Synka företag till Clay via webhook. Clay berikar automatiskt och skickar tillbaka kontakter via vår webhook.
+      </p>
+
+      {/* Test Connection */}
+      <Card className="mb-4">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              {testConnection.data?.connected === true
+                ? <Wifi className="w-5 h-5 text-green-600" />
+                : testConnection.data?.connected === false
+                ? <WifiOff className="w-5 h-5 text-red-500" />
+                : <Wifi className="w-5 h-5 text-gray-400" />
+              }
+              <div>
+                <p className="font-medium text-sm">Clay API-anslutning</p>
+                <p className="text-xs text-gray-500">
+                  {testConnection.data?.connected === true
+                    ? "Ansluten — API-nyckel och tabell verifierad"
+                    : testConnection.data?.connected === false
+                    ? "Misslyckades — kontrollera CLAY_API_KEY och CLAY_TABLE_ID"
+                    : "Klicka för att testa anslutningen"
+                  }
+                </p>
+              </div>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleTestConnection}
+              disabled={testConnection.isFetching}
+            >
+              {testConnection.isFetching ? <Loader2 className="w-4 h-4 animate-spin" /> : "Testa"}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Push to Clay */}
+      <Card className="mb-4">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <CloudUpload className="w-5 h-5 text-blue-600" />
+              <div>
+                <p className="font-medium text-sm">Pusha företag till Clay</p>
+                <p className="text-xs text-gray-500">
+                  Skickar företag utan Clay Row ID i batchar om 24 st (72 kontakter) med 30s paus.
+                </p>
+              </div>
+            </div>
+            <Button
+              size="sm"
+              className="bg-blue-600 hover:bg-blue-700"
+              onClick={() => pushMutation.mutate()}
+              disabled={pushMutation.isPending || isRunning}
+            >
+              {pushMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <CloudUpload className="w-4 h-4 mr-1" />}
+              Pusha till Clay
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Progress */}
+      {progress && progress.status !== "idle" && (
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2 mb-3">
+              {isRunning && <Loader2 className="w-4 h-4 animate-spin text-blue-600" />}
+              <p className="font-medium text-sm">
+                {progress.status === "pushing" ? "Pushar till Clay..." :
+                 progress.status === "done" ? "Synkning klar!" :
+                 progress.status === "error" ? "Fel vid synkning" : ""}
+              </p>
+            </div>
+
+            {/* Progress bar */}
+            <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
+              <div
+                className={`h-3 rounded-full transition-all duration-500 ${
+                  progress.status === "done" ? "bg-green-500" :
+                  progress.status === "error" ? "bg-red-500" : "bg-blue-500"
+                }`}
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
+
+            <div className="flex items-center justify-between text-xs text-gray-500">
+              <span>Batch {progress.currentBatch} / {progress.totalBatches}</span>
+              <span>{progress.processedCompanies} / {progress.totalCompanies} företag ({progressPercent}%)</span>
+            </div>
+
+            {(successCount > 0 || errorCount > 0) && (
+              <div className="flex gap-4 mt-3 text-sm">
+                {successCount > 0 && (
+                  <span className="text-green-700">{successCount} lyckade</span>
+                )}
+                {errorCount > 0 && (
+                  <span className="text-red-600">{errorCount} fel</span>
+                )}
+              </div>
+            )}
+
+            {/* Error details */}
+            {errorCount > 0 && (
+              <div className="mt-3 max-h-32 overflow-y-auto">
+                {progress.results.filter(r => !r.success).slice(0, 10).map((r, i) => (
+                  <p key={i} className="text-xs text-red-600 mb-1">
+                    Företag #{r.companyId}: {r.error}
+                  </p>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* How it works */}
+      <div className="mt-6">
+        <h3 className="font-semibold text-gray-900 mb-2">Så fungerar det</h3>
+        <ol className="space-y-2 text-sm text-gray-600">
+          <li className="flex gap-2"><span className="font-bold text-blue-600">1.</span> Testa Clay-anslutningen med din API-nyckel</li>
+          <li className="flex gap-2"><span className="font-bold text-blue-600">2.</span> Klicka "Pusha till Clay" — skickar företag i batchar om 24 st med 30s paus</li>
+          <li className="flex gap-2"><span className="font-bold text-blue-600">3.</span> Clay berikar automatiskt (Find People, triggers, entry angles)</li>
+          <li className="flex gap-2"><span className="font-bold text-blue-600">4.</span> Berikad data skickas tillbaka via webhook automatiskt</li>
+        </ol>
+      </div>
+    </div>
+  );
+}
+
 export default function Admin() {
   const { user, loading, isAuthenticated } = useAuth();
-  const [activeTab, setActiveTab] = useState<"assign" | "import" | "users">("assign");
+  const [activeTab, setActiveTab] = useState<"assign" | "import" | "users" | "clay">("assign");
   const [selectedCompanyIds, setSelectedCompanyIds] = useState<number[]>([]);
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string>("");
@@ -229,6 +412,7 @@ export default function Admin() {
           {[
             { key: "assign", label: "Tilldela veckolista", icon: Calendar },
             { key: "import", label: "Importera CSV", icon: Upload },
+            { key: "clay", label: "Clay Sync", icon: CloudUpload },
             { key: "users", label: "Användare", icon: Users },
           ].map(tab => (
             <button
@@ -413,6 +597,9 @@ export default function Admin() {
             </div>
           </div>
         )}
+
+        {/* ── Tab: Clay Sync ── */}
+        {activeTab === "clay" && <ClaySyncTab />}
 
         {/* ── Tab: Users ── */}
         {activeTab === "users" && (

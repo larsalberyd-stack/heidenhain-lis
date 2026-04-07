@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { getLoginUrl } from "@/const";
+// import { getLoginUrl } from "@/const";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -101,7 +101,7 @@ export default function Dashboard() {
               </div>
             )}
             {!isAuthenticated && (
-              <a href={getLoginUrl()}>
+              <a href="/login">
                 <Button variant="outline" size="sm" className="gap-1">
                   <LogIn className="w-4 h-4" />
                   <span className="hidden sm:inline">Logga in</span>

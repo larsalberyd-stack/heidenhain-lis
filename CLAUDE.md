@@ -37,18 +37,6 @@ These two integrations are hardcoded to Manus infrastructure and will NOT work o
 - **Env vars:** Replace `BUILT_IN_FORGE_API_URL` and `BUILT_IN_FORGE_API_KEY` with `ANTHROPIC_API_KEY`
 
 ### 2. Authentication (BLOCKER)
-- **Current:** OAuth via `WebDevAuthPublicService` (Manus OAuth provider)
-- **Problem:** This OAuth server is Manus infrastructure. Users cannot log in without it.
-- **Fix:** Replace with own auth solution — options: Auth0, Clerk, NextAuth, or simple JWT-based email/password
-- **Files to change:** `server/_core/sdk.ts`, `server/_core/oauth.ts`, `server/_core/env.ts`, `client/src/_core/hooks/useAuth.ts`
-- **Env vars:** Replace `VITE_APP_ID`, `OAUTH_SERVER_URL`, `OWNER_OPEN_ID`
-
-### 3. Maps Proxy (MINOR)
-- **Current:** Google Maps loaded via `forge.butterfly-effect.dev` proxy
-- **Fix:** Replace with direct Google Maps API key or remove maps feature for now
-- **Files:** `client/src/components/Map.tsx`
-
----
 
 ## Business Context
 
@@ -315,10 +303,7 @@ Procurement titles: CPO, VP Procurement/Purchasing/Supply Chain, Purchasing/Proc
 DATABASE_URL=mysql://user:password@host:port/database_name
 
 # Authentication (REPLACE — Manus OAuth will not work)
-VITE_APP_ID=your-app-id
-OAUTH_SERVER_URL=https://your-auth-provider.com
 JWT_SECRET=your-jwt-secret-key
-OWNER_OPEN_ID=openid-of-initial-admin-user
 
 # LLM (REPLACE — forge.manus.im will not work)
 # Option A: Anthropic
@@ -337,8 +322,6 @@ MAKE_WEBHOOK_URL=https://hook.eu1.make.com/your-webhook-path
 VITE_OAUTH_PORTAL_URL=https://your-auth-portal.com
 VITE_FRONTEND_FORGE_API_URL=https://your-maps-proxy.com
 VITE_FRONTEND_FORGE_API_KEY=your-key
-VITE_ANALYTICS_ENDPOINT=https://your-analytics.com
-VITE_ANALYTICS_WEBSITE_ID=your-id
 ```
 
 ---

@@ -265,7 +265,7 @@ export default function Landing() {
         <div className="max-w-3xl mx-auto text-center space-y-6">
           <h2 className="text-3xl font-bold">Redo att Komma Igång?</h2>
           <p className="text-xl text-muted-foreground">
-            Logga in med ditt Manus-konto för att komma åt dina tilldelade prospekt.
+            Logga in för att komma åt dina tilldelade prospekt.
           </p>
           <Button size="lg" onClick={() => setLocation("/dashboard")}>
             Öppna Dashboard

@@ -14,7 +14,12 @@ import {
   getDashboardStats, logWebhook,
   getAllUsers, getUserById, updateUserRole,
   createWeeklyAssignment, getWeeklyAssignments, getCompaniesByWeeklyList,
+  getCompaniesForClaySync,
 } from "./db";
+import {
+  testClayConnection, pushCompaniesToClayBatch,
+  getSyncProgress, resetSyncProgress,
+} from "./clay";
 
 // Admin-only middleware
 const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
@@ -317,6 +322,50 @@ ${input.companyDescription ? `Företagsbeskrivning: ${input.companyDescription.s
     companiesByList: adminProcedure
       .input(z.object({ weeklyListId: z.number() }))
       .query(async ({ input }) => getCompaniesByWeeklyList(input.weeklyListId)),
+  }),
+
+  // ─── Clay Sync (admin only) ────────────────────────────────────────────────
+  clay: router({
+    testConnection: adminProcedure
+      .query(async () => {
+        const ok = await testClayConnection();
+        return { connected: ok };
+      }),
+
+    syncStatus: adminProcedure
+      .query(() => getSyncProgress()),
+
+    pushToClay: adminProcedure
+      .mutation(async () => {
+        const companiesForSync = await getCompaniesForClaySync();
+        const eligible = companiesForSync.filter(c => c.domain && c.domain !== "UNABLE_TO_FIND");
+
+        if (eligible.length === 0) {
+          return { message: "Inga nya företag att synka.", pushed: 0 };
+        }
+
+        resetSyncProgress();
+
+        // Run async — don't await (frontend polls syncStatus)
+        pushCompaniesToClayBatch(
+          eligible.map(c => ({
+            id: c.id,
+            name: c.name,
+            domain: c.domain!,
+            category: c.category ?? undefined,
+            city: c.city ?? undefined,
+            country: c.country ?? undefined,
+            focus: c.focus ?? undefined,
+          })),
+        ).catch(err => {
+          console.error("[Clay Sync] Push failed:", err);
+        });
+
+        return {
+          message: `Synkning startad: ${eligible.length} företag i ${Math.ceil(eligible.length / 24)} batchar.`,
+          pushed: eligible.length,
+        };
+      }),
   }),
 
   // ─── Webhook (Clay HTTP API) ───────────────────────────────────────────────

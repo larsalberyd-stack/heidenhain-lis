@@ -1,135 +1,159 @@
 import { ENV } from "./_core/env";
 
-const CLAY_API_BASE = "https://api.clay.com/v1";
-
-export interface ClayCompanyInput {
-  company_domain: string;
-  segment?: string;
-}
-
-export interface ClayDecisionMaker {
+export interface BatchCompany {
+  id: number;
   name: string;
-  title: string;
-  email?: string;
-  phone?: string;
-  linkedin?: string;
-  role?: string;
+  domain: string;
+  category?: string;
+  city?: string;
+  country?: string;
+  focus?: string;
 }
 
-export interface ClayTrigger {
-  text: string;
-  source: string;
-  relevance: string;
+export interface BatchResult {
+  companyId: number;
+  companyName: string;
+  success: boolean;
+  error?: string;
 }
 
-export interface ClayEntryAngle {
-  angle: string;
-  target: string;
-  product?: string;
+export interface SyncProgress {
+  status: "idle" | "pushing" | "done" | "error";
+  totalCompanies: number;
+  processedCompanies: number;
+  currentBatch: number;
+  totalBatches: number;
+  results: BatchResult[];
+  errorMessage?: string;
 }
 
-export interface ClayQualifyingQuestion {
-  question: string;
-  category: string;
-  purpose?: string;
+// In-memory sync state (single-instance server)
+let currentSync: SyncProgress = {
+  status: "idle",
+  totalCompanies: 0,
+  processedCompanies: 0,
+  currentBatch: 0,
+  totalBatches: 0,
+  results: [],
+};
+
+export function getSyncProgress(): SyncProgress {
+  return { ...currentSync };
 }
 
-export interface ClayEnrichedData {
-  company_name?: string;
-  industry?: string;
-  employee_count?: string;
-  revenue?: string;
-  description?: string;
-  decision_makers?: ClayDecisionMaker[];
-  triggers?: ClayTrigger[];
-  entry_angles?: ClayEntryAngle[];
-  qualifying_questions?: ClayQualifyingQuestion[];
+export function resetSyncProgress(): void {
+  currentSync = {
+    status: "idle",
+    totalCompanies: 0,
+    processedCompanies: 0,
+    currentBatch: 0,
+    totalBatches: 0,
+    results: [],
+  };
 }
 
 /**
- * Add a new row to Clay table for enrichment
+ * Test Clay webhook connection by sending a test payload
  */
-export async function addCompanyToClay(input: ClayCompanyInput): Promise<{ rowId: string }> {
-  const response = await fetch(`${CLAY_API_BASE}/tables/${ENV.clayTableId}/rows`, {
+export async function testClayConnection(): Promise<boolean> {
+  try {
+    const response = await fetch(ENV.clayWebhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${ENV.clayApiKey}`,
+      },
+      body: JSON.stringify({ _test: true, _source: "heidenhain-lis" }),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Push a single company to Clay via webhook
+ */
+async function pushCompanyToClay(company: BatchCompany): Promise<void> {
+  const response = await fetch(ENV.clayWebhookUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${ENV.clayApiKey}`,
     },
     body: JSON.stringify({
-      fields: {
-        company_domain: input.company_domain,
-        segment: input.segment || "",
-      },
+      company_name: company.name,
+      company_domain: company.domain,
+      category: company.category || "",
+      city: company.city || "",
+      country: company.country || "",
+      focus: company.focus || "",
     }),
   });
 
   if (!response.ok) {
     const error = await response.text();
-    throw new Error(`Clay API error: ${response.status} - ${error}`);
+    throw new Error(`Clay webhook error: ${response.status} - ${error}`);
   }
+}
 
-  const data = await response.json();
-  return { rowId: data.id };
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /**
- * Get enriched data for a company from Clay
+ * Push companies to Clay via webhook in batches of 24 with 30s pause.
+ * 24 companies × 3 contacts = 72 contact rows per batch (Clay limit).
+ * Clay auto-enriches (Find People) when rows are added via webhook.
  */
-export async function getEnrichedDataFromClay(rowId: string): Promise<ClayEnrichedData> {
-  const response = await fetch(`${CLAY_API_BASE}/tables/${ENV.clayTableId}/rows/${rowId}`, {
-    method: "GET",
-    headers: {
-      "Authorization": `Bearer ${ENV.clayApiKey}`,
-    },
-  });
+export async function pushCompaniesToClayBatch(
+  companies: BatchCompany[],
+): Promise<BatchResult[]> {
+  const BATCH_SIZE = 24;
+  const BATCH_DELAY_MS = 30_000;
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Clay API error: ${response.status} - ${error}`);
+  const batches: BatchCompany[][] = [];
+  for (let i = 0; i < companies.length; i += BATCH_SIZE) {
+    batches.push(companies.slice(i, i + BATCH_SIZE));
   }
 
-  const data = await response.json();
-  
-  // Parse JSON fields from Clay
-  const parseJSON = (field: any) => {
-    if (!field) return undefined;
-    if (typeof field === "string") {
+  currentSync = {
+    status: "pushing",
+    totalCompanies: companies.length,
+    processedCompanies: 0,
+    currentBatch: 0,
+    totalBatches: batches.length,
+    results: [],
+  };
+
+  const allResults: BatchResult[] = [];
+
+  for (let batchIdx = 0; batchIdx < batches.length; batchIdx++) {
+    currentSync.currentBatch = batchIdx + 1;
+
+    const batch = batches[batchIdx];
+    for (const company of batch) {
       try {
-        return JSON.parse(field);
-      } catch {
-        return undefined;
+        await pushCompanyToClay(company);
+
+        const result: BatchResult = { companyId: company.id, companyName: company.name, success: true };
+        allResults.push(result);
+        currentSync.results.push(result);
+      } catch (err: any) {
+        const result: BatchResult = { companyId: company.id, companyName: company.name, success: false, error: err.message };
+        allResults.push(result);
+        currentSync.results.push(result);
       }
+
+      currentSync.processedCompanies++;
     }
-    return field;
-  };
 
-  return {
-    company_name: data.fields?.company_name || data.fields?.org,
-    industry: data.fields?.industry,
-    employee_count: data.fields?.employee_count,
-    revenue: data.fields?.revenue,
-    description: data.fields?.description,
-    decision_makers: parseJSON(data.fields?.decision_makers),
-    triggers: parseJSON(data.fields?.triggers),
-    entry_angles: parseJSON(data.fields?.entry_angles),
-    qualifying_questions: parseJSON(data.fields?.qualifying_questions),
-  };
-}
-
-/**
- * Test Clay API connection
- */
-export async function testClayConnection(): Promise<boolean> {
-  try {
-    const response = await fetch(`${CLAY_API_BASE}/tables/${ENV.clayTableId}`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${ENV.clayApiKey}`,
-      },
-    });
-    return response.ok;
-  } catch {
-    return false;
+    // Wait 30s between batches (skip after last batch)
+    if (batchIdx < batches.length - 1) {
+      await sleep(BATCH_DELAY_MS);
+    }
   }
+
+  currentSync.status = "done";
+  return allResults;
 }

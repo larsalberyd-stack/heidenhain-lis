@@ -257,6 +257,58 @@ export async function getCompaniesByWeeklyList(weeklyListId: number) {
   );
 }
 
+// ─── Clay Sync ──────────────────────────────────────────────────────────────
+export async function getCompaniesForClaySync() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select({
+    id: companies.id,
+    name: companies.name,
+    domain: companies.domain,
+    category: companies.category,
+    city: companies.city,
+    country: companies.country,
+    focus: companies.focus,
+    clayRowId: companies.clayRowId,
+  }).from(companies).where(isNull(companies.clayRowId)).orderBy(
+    sql`FIELD(focus, 'AAA', 'AA', 'A', 'B', 'C', '')`,
+    companies.name
+  );
+}
+
+export async function getCompaniesWithClayRowId() {
+  const db = await getDb();
+  if (!db) return [];
+  const rows = await db.select({
+    id: companies.id,
+    clayRowId: companies.clayRowId,
+  }).from(companies);
+  return rows.filter((r): r is { id: number; clayRowId: string } => !!r.clayRowId);
+}
+
+export async function updateCompanyClayRowId(companyId: number, clayRowId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(companies).set({ clayRowId, updatedAt: new Date() }).where(eq(companies.id, companyId));
+}
+
+export async function updateCompanyEnrichedData(companyId: number, data: {
+  description?: string;
+  industry?: string;
+  employeeCount?: number;
+  revenue?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(companies).set({
+    ...(data.description ? { description: data.description } : {}),
+    ...(data.industry ? { industry: data.industry } : {}),
+    ...(data.employeeCount ? { employeeCount: data.employeeCount } : {}),
+    enrichedAt: new Date(),
+    updatedAt: new Date(),
+  }).where(eq(companies.id, companyId));
+}
+
 // ─── Stats ───────────────────────────────────────────────────────────────────
 export async function getDashboardStats() {
   const db = await getDb();

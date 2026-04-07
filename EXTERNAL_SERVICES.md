@@ -9,15 +9,12 @@ The application uses a remote MySQL-compatible database (likely TiDB Serverless 
 *   **Environment Variable:** `DATABASE_URL`
 *   **Config Location:** `server/db.ts`, `drizzle.config.ts`, `server/_core/env.ts`
 
-## 2. Authentication (OAuth Provider)
-The app delegates user authentication to an external OAuth 2.0 service.
+## 2. Authentication (Local Email Login)
+The app uses a simple local email-based login with JWT session cookies.
 *   **Purpose:** User login, session management, and identity verification.
-*   **Integration:** Custom OAuth client using `axios` and `jose` for JWT verification.
-*   **Environment Variables:**
-    *   `VITE_APP_ID` (Client ID)
-    *   `OAUTH_SERVER_URL` (Base URL for the auth service)
+*   **Integration:** JWT session cookies, no external OAuth.
+*   **Environment Variable:**
     *   `JWT_SECRET` (Secret for signing/verifying session cookies)
-    *   `OWNER_OPEN_ID` (OpenID of the initial admin user)
 *   **Config Location:** `server/_core/sdk.ts`, `server/_core/oauth.ts`, `server/_core/env.ts`
 
 ## 3. LLM Provider (Forge API / Gemini)
@@ -61,8 +58,6 @@ The frontend injects a privacy-focused analytics script.
 *   **Purpose:** Tracking page views and user interactions.
 *   **Integration:** `<script defer src="...">` tag in the main HTML file.
 *   **Environment Variables:**
-    *   `VITE_ANALYTICS_ENDPOINT` (Base URL for the Umami instance)
-    *   `VITE_ANALYTICS_WEBSITE_ID` (Unique site identifier)
 *   **Config Location:** `client/index.html`
 
 ## 8. Experimental / Unused Integrations

@@ -1,13 +1,14 @@
 export const ENV = {
-  appId: process.env.VITE_APP_ID ?? "",
   cookieSecret: process.env.JWT_SECRET ?? "",
   databaseUrl: process.env.DATABASE_URL ?? "",
-  oAuthServerUrl: process.env.OAUTH_SERVER_URL ?? "",
-  ownerOpenId: process.env.OWNER_OPEN_ID ?? "",
   isProduction: process.env.NODE_ENV === "production",
+  openAIApiKey: process.env.OPENAI_API_KEY ?? "",
+  anthropicApiKey: process.env.ANTHROPIC_API_KEY ?? "",
   forgeApiUrl: process.env.BUILT_IN_FORGE_API_URL ?? "",
   forgeApiKey: process.env.BUILT_IN_FORGE_API_KEY ?? "",
+  ownerOpenId: process.env.OWNER_OPEN_ID ?? "",
   clayApiKey: process.env.CLAY_API_KEY ?? "",
   clayTableId: process.env.CLAY_TABLE_ID ?? "",
+  clayWebhookUrl: process.env.CLAY_WEBHOOK_URL ?? "",
   makeWebhookUrl: process.env.MAKE_WEBHOOK_URL ?? "",
 };

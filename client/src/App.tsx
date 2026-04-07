@@ -6,6 +6,7 @@ import Dashboard from "@/pages/Dashboard";
 import CompanyDetail from "@/pages/CompanyDetail";
 import Admin from "@/pages/Admin";
 import MySales from "@/pages/MySales";
+import Login from "@/pages/Login";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/company/:id" component={CompanyDetail} />
       <Route path="/admin" component={Admin} />
       <Route path="/my-sales" component={MySales} />
+      <Route path="/login" component={Login} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

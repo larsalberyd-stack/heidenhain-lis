@@ -71,10 +71,15 @@ export async function updateUserRole(id: number, role: "user" | "admin") {
 export async function getAllCompanies() {
   const db = await getDb();
   if (!db) return [];
-  return db.select().from(companies).orderBy(
-    sql`FIELD(focus, 'AAA', 'AA', 'A', 'B', 'C', '')`,
-    companies.name
-  );
+  // Only show companies that have at least one contact
+  return db.select({ company: companies }).from(companies)
+    .innerJoin(contacts, eq(contacts.companyId, companies.id))
+    .groupBy(companies.id)
+    .orderBy(
+      sql`FIELD(${companies.focus}, 'AAA', 'AA', 'A', 'B', 'C', '')`,
+      companies.name
+    )
+    .then(rows => rows.map(r => r.company));
 }
 
 export async function getCompanyById(id: number) {

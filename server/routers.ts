@@ -244,8 +244,11 @@ ${input.companyDescription ? `Företagsbeskrivning: ${input.companyDescription.s
           },
         });
 
-        const content = response.choices[0].message.content;
-        const parsed = JSON.parse(typeof content === "string" ? content : JSON.stringify(content));
+        let content = response.choices[0].message.content;
+        if (typeof content !== "string") content = JSON.stringify(content);
+        // Strip markdown code fences if present (Anthropic sometimes wraps JSON)
+        content = content.replace(/^```(?:json)?\s*\n?/i, "").replace(/\n?```\s*$/i, "").trim();
+        const parsed = JSON.parse(content);
 
         const emailId = await saveGeneratedEmail({
           companyId: input.companyId,

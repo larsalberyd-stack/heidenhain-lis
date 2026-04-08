@@ -37,18 +37,6 @@ jobs:
           cp dist/index.js deploy/dist/
           cp -r dist/public/* deploy/dist/public/
           cp package.json deploy/
-          mkdir -p deploy/node_modules
-          cp -r node_modules/bcryptjs deploy/node_modules/
-          cp -r node_modules/mysql2 deploy/node_modules/
-          cp -r node_modules/sqlstring deploy/node_modules/ 2>/dev/null || true
-          cp -r node_modules/denque deploy/node_modules/ 2>/dev/null || true
-          cp -r node_modules/lru.min deploy/node_modules/ 2>/dev/null || true
-          cp -r node_modules/seq-queue deploy/node_modules/ 2>/dev/null || true
-          cp -r node_modules/iconv-lite deploy/node_modules/ 2>/dev/null || true
-          cp -r node_modules/long deploy/node_modules/ 2>/dev/null || true
-          cp -r node_modules/generate-function deploy/node_modules/ 2>/dev/null || true
-          cp -r node_modules/aws-ssl-profiles deploy/node_modules/ 2>/dev/null || true
-          cp -r node_modules/named-placeholders deploy/node_modules/ 2>/dev/null || true
 
       - name: Login to Azure
         uses: azure/login@v2

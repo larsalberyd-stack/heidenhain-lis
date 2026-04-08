@@ -2,6 +2,7 @@ import { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
 import { ForbiddenError } from "@shared/_core/errors";
 import { SignJWT, jwtVerify } from "jose";
 import type { Request } from "express";
+import type { User } from "../../drizzle/schema";
 import * as db from "../db";
 import { ENV } from "./env";
 

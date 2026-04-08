@@ -2,6 +2,9 @@ import express from "express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
+import { upsertUser, getUserByOpenId } from "./db";
+import { randomBytes } from "crypto";
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,9 +17,6 @@ async function startServer() {
   // För att kunna läsa JSON-body
   app.use(express.json());
   // --- E-postbaserad inloggning ---
-  import { upsertUser, getUserByOpenId } from "./db";
-  import { randomBytes } from "crypto";
-  import cookie from "cookie";
   const SESSION_COOKIE = "heidenhain_session";
   const SESSION_SECRET = process.env.JWT_SECRET || randomBytes(32).toString("hex");
 
@@ -33,12 +33,12 @@ async function startServer() {
 
       // Skapa enkel sessionscookie (ej JWT, men tillräckligt för demo)
       const sessionValue = Buffer.from(`${user.id}:${SESSION_SECRET}`).toString("base64");
-      res.setHeader("Set-Cookie", cookie.serialize(SESSION_COOKIE, sessionValue, {
+      res.cookie(SESSION_COOKIE, sessionValue, {
         httpOnly: true,
         path: "/",
         sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 7, // 1 vecka
-      }));
+        maxAge: 60 * 60 * 24 * 7 * 1000, // 1 vecka (ms)
+      });
       res.json({ success: true, user: { id: user.id, email: user.email, name: user.name, role: user.role } });
     } catch (err) {
       res.status(500).json({ error: "Serverfel vid inloggning" });

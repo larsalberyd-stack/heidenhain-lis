@@ -72,14 +72,12 @@ export async function getAllCompanies() {
   const db = await getDb();
   if (!db) return [];
   // Only show companies that have at least one contact
-  return db.select({ company: companies }).from(companies)
-    .innerJoin(contacts, eq(contacts.companyId, companies.id))
-    .groupBy(companies.id)
+  return db.select().from(companies)
+    .where(sql`${companies.id} IN (SELECT DISTINCT companyId FROM contacts)`)
     .orderBy(
       sql`FIELD(${companies.focus}, 'AAA', 'AA', 'A', 'B', 'C', '')`,
       companies.name
-    )
-    .then(rows => rows.map(r => r.company));
+    );
 }
 
 export async function getCompanyById(id: number) {
@@ -319,7 +317,7 @@ export async function getDashboardStats() {
   const db = await getDb();
   if (!db) return { totalCompanies: 0, totalContacts: 0, aaaCount: 0, aaCount: 0, aCount: 0, contactedCount: 0, emailsGenerated: 0 };
   const [companyRows, contactRows, emailRows] = await Promise.all([
-    db.select().from(companies),
+    db.select().from(companies).where(sql`${companies.id} IN (SELECT DISTINCT companyId FROM contacts)`),
     db.select({ id: contacts.id }).from(contacts),
     db.select({ id: generatedEmails.id }).from(generatedEmails),
   ]);

@@ -130,6 +130,58 @@ export async function getCompaniesByAssignedUser(userId: number) {
   );
 }
 
+// Returns companies where the user is assigned OR has logged any activity OR generated any email.
+// `engagementMatches` array holds candidate strings (user.name, user.email) to match against
+// activities.performedBy / generated_emails.generatedBy (both varchar, populated from frontend).
+export async function getCompaniesByUserEngagement(userId: number, engagementMatches: string[]) {
+  const db = await getDb();
+  if (!db) return [];
+  const matches = engagementMatches.filter(s => s && s.trim().length > 0);
+
+  // Build subquery for engagement-based companyIds. Fall back to assigned-only if no matches.
+  const conditions = [eq(companies.assignedToUserId, userId)];
+  if (matches.length > 0) {
+    const activityCompanyIds = db.select({ id: activities.companyId }).from(activities)
+      .where(sql`${activities.performedBy} IN (${sql.join(matches.map(m => sql`${m}`), sql`, `)})`);
+    const emailCompanyIds = db.select({ id: generatedEmails.companyId }).from(generatedEmails)
+      .where(sql`${generatedEmails.generatedBy} IN (${sql.join(matches.map(m => sql`${m}`), sql`, `)})`);
+    conditions.push(sql`${companies.id} IN ${activityCompanyIds}` as any);
+    conditions.push(sql`${companies.id} IN ${emailCompanyIds}` as any);
+  }
+  const rows = await db.select().from(companies).where(or(...conditions)).orderBy(
+    sql`FIELD(focus, 'AAA', 'AA', 'A', 'B', 'C', '')`,
+    companies.name
+  );
+
+  // Annotate each row with how the user is connected. Cheap second pass: query activity counts.
+  if (matches.length === 0 || rows.length === 0) {
+    return rows.map(r => ({ ...r, isAssigned: r.assignedToUserId === userId, hasOwnActivity: false }));
+  }
+  const ids = rows.map(r => r.id);
+  const [acts] = await db.execute(sql`
+    SELECT companyId, COUNT(*) AS n FROM activities
+    WHERE performedBy IN (${sql.join(matches.map(m => sql`${m}`), sql`, `)})
+      AND companyId IN (${sql.join(ids.map(i => sql`${i}`), sql`, `)})
+    GROUP BY companyId
+  `);
+  const [emails] = await db.execute(sql`
+    SELECT companyId, COUNT(*) AS n FROM generated_emails
+    WHERE generatedBy IN (${sql.join(matches.map(m => sql`${m}`), sql`, `)})
+      AND companyId IN (${sql.join(ids.map(i => sql`${i}`), sql`, `)})
+    GROUP BY companyId
+  `);
+  const activityMap = new Map<number, number>();
+  for (const r of acts as unknown as { companyId: number; n: number }[]) activityMap.set(r.companyId, Number(r.n));
+  const emailMap = new Map<number, number>();
+  for (const r of emails as unknown as { companyId: number; n: number }[]) emailMap.set(r.companyId, Number(r.n));
+  return rows.map(r => ({
+    ...r,
+    isAssigned: r.assignedToUserId === userId,
+    hasOwnActivity: (activityMap.get(r.id) ?? 0) > 0 || (emailMap.get(r.id) ?? 0) > 0,
+    ownActivityCount: (activityMap.get(r.id) ?? 0) + (emailMap.get(r.id) ?? 0),
+  }));
+}
+
 export async function getUnassignedCompanies() {
   const db = await getDb();
   if (!db) return [];

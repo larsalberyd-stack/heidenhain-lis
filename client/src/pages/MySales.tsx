@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Building2, Search, MapPin, ChevronRight, Zap, LogIn, User } from "lucide-react";
+import { Building2, Search, MapPin, ChevronRight, Zap, LogIn, User, Send, Pin } from "lucide-react";
 
 const focusBadge: Record<string, string> = {
   AAA: "bg-red-100 text-red-800 border-red-200",
@@ -30,8 +30,8 @@ export default function MySales() {
   const { user, loading, isAuthenticated, logout } = useAuth();
   const [search, setSearch] = useState("");
 
-  const { data: myCompanies = [], isLoading: loadingCompanies } = trpc.companies.byAssignedUser.useQuery(
-    { userId: user?.id ?? 0 },
+  const { data: myCompanies = [], isLoading: loadingCompanies } = trpc.companies.byUserEngagement.useQuery(
+    undefined,
     { enabled: !!user?.id }
   );
 
@@ -99,7 +99,7 @@ export default function MySales() {
             </div>
             <div>
               <h1 className="text-base sm:text-lg font-bold text-gray-900">Mina Prospekt</h1>
-              <p className="text-xs text-gray-500">Tilldelade av FC · Sorterat AAA → C</p>
+              <p className="text-xs text-gray-500">Tilldelade + egna aktiviteter · Sorterat AAA → C</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -167,9 +167,9 @@ export default function MySales() {
           <Card>
             <CardContent className="py-16 text-center">
               <Building2 className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500 font-medium">Inga prospekt tilldelade ännu</p>
+              <p className="text-gray-500 font-medium">Inga prospekt än</p>
               <p className="text-sm text-gray-400 mt-1">
-                Din säljchef tilldelar dig en veckolista med prospekt.
+                Företag du tilldelas eller mejlar dyker upp här automatiskt.
               </p>
             </CardContent>
           </Card>
@@ -187,7 +187,7 @@ export default function MySales() {
                   <CardContent className="p-4">
                     <div className="flex items-center gap-3">
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
                           <h3 className="font-semibold text-gray-900 truncate group-hover:text-red-700 transition-colors">
                             {company.name}
                           </h3>
@@ -195,6 +195,18 @@ export default function MySales() {
                             <Badge className={`text-xs border flex-shrink-0 ${focusBadge[company.focus] || focusBadge.C}`}>
                               {company.focus}
                             </Badge>
+                          )}
+                          {(company as any).isAssigned && (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded border bg-red-50 text-red-700 border-red-200">
+                              <Pin className="w-2.5 h-2.5" />
+                              Tilldelad
+                            </span>
+                          )}
+                          {(company as any).hasOwnActivity && !(company as any).isAssigned && (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded border bg-blue-50 text-blue-700 border-blue-200">
+                              <Send className="w-2.5 h-2.5" />
+                              Egen aktivitet
+                            </span>
                           )}
                         </div>
                         <div className="flex items-center gap-3 text-xs text-gray-500">

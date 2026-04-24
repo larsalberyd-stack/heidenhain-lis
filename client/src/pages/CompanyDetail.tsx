@@ -15,6 +15,7 @@ import {
   Building2, Copy, Send, RefreshCw, ExternalLink, ChevronDown, ChevronUp,
   Phone, Calendar, MessageSquare, FileText, Clock, Plus, Activity
 } from "lucide-react";
+import { classifyTitle, decisionMakerLabels } from "@shared/targeting";
 
 const focusBadge: Record<string, string> = {
   AAA: "bg-red-100 text-red-800 border-red-200",
@@ -58,6 +59,7 @@ export default function CompanyDetail() {
   const [generatedEmail, setGeneratedEmail] = useState<GeneratedEmail | null>(null);
   const [editedBody, setEditedBody] = useState("");
   const [showAllContacts, setShowAllContacts] = useState(false);
+  const [showOnlyDecisionMakers, setShowOnlyDecisionMakers] = useState(true);
 
   // Activity log state
   const [newActivityType, setNewActivityType] = useState<string>("call");
@@ -150,8 +152,21 @@ export default function CompanyDetail() {
     );
   }
 
-  const selectedContact = contacts.find(c => c.id === selectedContactId) || contacts[0] || null;
-  const displayedContacts = showAllContacts ? contacts : contacts.slice(0, 4);
+  const categoryRank: Record<string, number> = { tech: 0, procurement: 1, exec: 2 };
+  const sortedContacts = [...contacts].sort((a, b) => {
+    const ca = classifyTitle(a.title);
+    const cb = classifyTitle(b.title);
+    const ra = ca ? categoryRank[ca] : 99;
+    const rb = cb ? categoryRank[cb] : 99;
+    if (ra !== rb) return ra - rb;
+    return (a.fullName || "").localeCompare(b.fullName || "");
+  });
+  const decisionMakerCount = sortedContacts.filter(c => classifyTitle(c.title) !== null).length;
+  const filteredContacts = showOnlyDecisionMakers && decisionMakerCount > 0
+    ? sortedContacts.filter(c => classifyTitle(c.title) !== null)
+    : sortedContacts;
+  const selectedContact = filteredContacts.find(c => c.id === selectedContactId) || filteredContacts[0] || null;
+  const displayedContacts = showAllContacts ? filteredContacts : filteredContacts.slice(0, 4);
 
   const handleGenerateEmail = () => {
     if (!selectedContact) {
@@ -406,11 +421,24 @@ export default function CompanyDetail() {
         {/* Contacts */}
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
               <CardTitle className="flex items-center gap-2">
                 <Users className="w-5 h-5 text-gray-500" />
-                Kontakter ({contacts.length})
+                Kontakter ({filteredContacts.length}{showOnlyDecisionMakers && decisionMakerCount > 0 && decisionMakerCount < contacts.length ? ` av ${contacts.length}` : ""})
               </CardTitle>
+              {decisionMakerCount > 0 && decisionMakerCount < contacts.length && (
+                <button
+                  onClick={() => setShowOnlyDecisionMakers(v => !v)}
+                  className={`text-xs font-medium px-2.5 py-1 rounded border transition-colors ${
+                    showOnlyDecisionMakers
+                      ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
+                      : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
+                  }`}
+                  title={showOnlyDecisionMakers ? "Visa alla kontakter" : "Visa endast beslutsfattare"}
+                >
+                  {showOnlyDecisionMakers ? `Endast beslutsfattare (${decisionMakerCount})` : `Visa alla (${contacts.length})`}
+                </button>
+              )}
             </div>
           </CardHeader>
           <CardContent>
@@ -434,8 +462,26 @@ export default function CompanyDetail() {
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm text-gray-900">{contact.fullName || `${contact.firstName} ${contact.lastName}`.trim()}</p>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <p className="font-medium text-sm text-gray-900">{contact.fullName || `${contact.firstName} ${contact.lastName}`.trim()}</p>
+                          {(() => {
+                            const cat = classifyTitle(contact.title);
+                            if (!cat) return null;
+                            const meta = decisionMakerLabels[cat];
+                            return (
+                              <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded border ${meta.color}`}>
+                                {meta.label}
+                              </span>
+                            );
+                          })()}
+                        </div>
                         <p className="text-xs text-gray-500 truncate">{contact.title || "—"}</p>
+                        {contact.location && (
+                          <p className="text-[11px] text-gray-400 truncate mt-0.5 flex items-center gap-1">
+                            <MapPin className="w-2.5 h-2.5 flex-shrink-0" />
+                            {contact.location}
+                          </p>
+                        )}
                         {contact.email && (
                           <p className="text-xs text-blue-600 truncate mt-0.5">{contact.email}</p>
                         )}
@@ -619,6 +665,14 @@ export default function CompanyDetail() {
                       onClick={() => {
                         window.open(`mailto:${selectedContact.email}?subject=${encodeURIComponent(generatedEmail.subject)}&body=${encodeURIComponent(editedBody)}`);
                         updateEmailMutation.mutate({ id: generatedEmail.id, status: "sent", editedBody });
+                        const recipient = selectedContact.fullName || `${selectedContact.firstName ?? ""} ${selectedContact.lastName ?? ""}`.trim() || selectedContact.email;
+                        addActivityMutation.mutate({
+                          companyId,
+                          contactId: selectedContact.id,
+                          type: "email_sent",
+                          description: `Mejl till ${recipient}: ${generatedEmail.subject}`,
+                          performedBy: user?.name || user?.email || undefined,
+                        });
                       }}>
                       <Send className="w-3.5 h-3.5 mr-1" />
                       Öppna i mejlklient

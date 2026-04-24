@@ -7,7 +7,7 @@ import { invokeLLM } from "./_core/llm";
 import { TRPCError } from "@trpc/server";
 import {
   getAllCompanies, getCompanyById, searchCompanies, upsertCompany, updateCompanyStatus,
-  assignCompanyToUser, getCompaniesByAssignedUser, getUnassignedCompanies,
+  assignCompanyToUser, getCompaniesByAssignedUser, getCompaniesByUserEngagement, getUnassignedCompanies,
   getContactsByCompanyId, getContactById, upsertContact, getAllContacts, updateContactPhone,
   getEmailsByCompanyId, saveGeneratedEmail, updateEmailStatus,
   getActivitiesByCompanyId, addActivity,
@@ -89,6 +89,14 @@ export const appRouter = router({
     byAssignedUser: protectedProcedure
       .input(z.object({ userId: z.number() }))
       .query(async ({ input }) => getCompaniesByAssignedUser(input.userId)),
+
+    // Includes assigned companies + any company where the user has logged activity or generated email.
+    // Used by "Mina Prospekt" so Per (and säljare) sees everything they've personally engaged with.
+    byUserEngagement: protectedProcedure
+      .query(async ({ ctx }) => {
+        const matches = [ctx.user.name, ctx.user.email].filter((s): s is string => !!s);
+        return getCompaniesByUserEngagement(ctx.user.id, matches);
+      }),
 
     unassigned: adminProcedure.query(async () => getUnassignedCompanies()),
 
